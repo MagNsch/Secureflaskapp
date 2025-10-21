@@ -1,0 +1,62 @@
+/* style.css */
+:root {
+  --accent: #0077ff;
+  --bg: #f8faff;
+  --text: #1c1c1c;
+  --border: #d0d7e2;
+  --code-bg: #eef2f6;
+  /* 🖋 Skrifttype */
+  --font-family: "Inter", system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1116;
+    --text: #e5e7eb;
+    --border: #2a2f3a;
+    --accent: #3399ff;
+    --code-bg: #1b1e24;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+button,
+a.button {
+  border-radius: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9em;
+  opacity: 0.7;
+  margin-top: 3rem;
+}
+
+
+/*Nedenstående er så loginform og registeringsform er centreret */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+    form {
+      width: 300px;
+    }

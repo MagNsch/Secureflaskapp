@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+<link rel="stylesheet" href={{ url_for('static', filename='style.css')}} />
+<div class="container nav-content">
+<header class="navbar">
+    <nav>
+    <a href="{{ url_for('index') }}">Forsiden</a>
+    {% if g.user %}
+    <a href="{{ url_for('auth.logout') }}">Log Out</a> 
+    <span>Logged in as: {{ g.user['username'] }}</span>
+    {% else %}
+    <a href="{{ url_for('auth.register') }}">Register</a>
+    <a href="{{ url_for('auth.login') }}">Log In</a>
+    {% endif %}
+      <nav>
+    </div>
+  </header>
+<section class="content">
+  <header>{% block header %}{% endblock %}</header>
+  {% for message in get_flashed_messages() %}
+  <div class="flash">{{ message }}</div>
+  {% endfor %} {% block content %}{% endblock %}
+</section>
