@@ -1,6 +1,10 @@
 import os
 
 from flask import Flask, render_template
+from flask_socketio import SocketIO
+
+
+socketio = SocketIO(cors_allowed_origins="*")
 
 def create_app(test_config=None):
     # create and configure the app
@@ -28,5 +32,10 @@ def create_app(test_config=None):
     from . import blog
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
-
+    from .blog import get_comments_for_post
+    app.jinja_env.globals.update(get_comments_for_post=get_comments_for_post)
+    
+    from . import comment
+    app.register_blueprint(comment.bp)
+    
     return app

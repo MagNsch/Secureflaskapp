@@ -13,11 +13,22 @@ bp = Blueprint('blog', __name__)
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
+        'SELECT p.id, p.title, p.body, p.created, author_id, username, email'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
     return render_template('blog/index.html', posts=posts)
+
+def get_comments_for_post(post_id):
+    db = get_db()
+    comments = db.execute(
+        'SELECT c.id, c.comment, c.author_id, u.username AS author FROM comment c '
+        'JOIN user u ON c.author_id = u.id '
+        'WHERE c.post_id = ? ORDER BY c.id DESC',
+        (post_id,)
+    ).fetchall()
+    return comments
+
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required

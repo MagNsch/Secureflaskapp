@@ -1,31 +1,66 @@
-{% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}Posts{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('blog.create') }}">New</a>
-  {% endif %}
-  <br><br>
-{% endblock %}
-
-{% block content %}
-  {% for post in posts %}
-    <article class="post">
-      <header>
-        <div>
-          <h1>{{ post['title'] }}</h1>
-        </div>
-        {% if g.user['id'] == post['author_id'] %}
-          <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
-        {% endif %}
-      </header>
-      <blockquote>
-    <p class="body">{{ post['body'] }}</p>
-    <p><cite>– {{ post['username'] }} Created by:  on {{ post['created'].strftime('%Y-%m-%d %H:%M') }}</cite></p>
-    </blockquote>
-    </article>
-    {% if not loop.last %}
-      <hr>
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Posts{% endblock %}</h1>
+{% if g.user %}
+<a class="action" href="{{ url_for('blog.create') }}">New</a>
+{% endif %}
+<br /><br />
+{% endblock %} {% block content %} {% for post in posts %}
+<article class="post">
+  <header>
+    <div>
+      <h1>{{ post['title'] }}</h1>
+    </div>
+    {% if g.user['id'] == post['author_id'] %}
+    <a class="action" href="{{ url_for('blog.update', id=post['id']) }}"
+      >Edit</a
+    >
     {% endif %}
-  {% endfor %}
-{% endblock %}
+  </header>
+  <div>
+    <p class="body">{{ post['body'] }}</p>
+    <p>
+      <cite> Created by: {{ post['email'] }}</cite>
+      <br />
+      <cite> {{ post['created'].strftime('%Y-%m-%d %H:%M') }}</cite>
+    </p>
+    <ul>
+      {% for c in get_comments_for_post(post['id']) %}
+      <li style="padding=10px">
+        <strong>{{ c['author'] }}:</strong> {{ c['comment'] }} {% if
+        g.user['id'] == c['author_id'] %}
+        <form
+          action="{{ url_for('comment.delete_comment') }}"
+          method="post"
+          style="display: inline"
+        >
+          <input type="hidden" name="comment_id" value="{{ c['id'] }}" />
+          <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% if g.user %}
+    <form style="padding: 10px" action="{{ url_for('comment.add_comment') }}" method="post">
+      <input type="hidden" name="post_id" value="{{ post['id'] }}" />
+      <input type="text" name="comment" placeholder="Skriv en kommentar" />
+      <button type="submit">Send</button>
+    </form>
+    {% else %}
+    <p>Du skal være logget ind for at kommentere.</p>
+    {% endif %}
+  </div>
+  <form style="padding: 10px" action="{{ url_for('blog.delete', id=post['id']) }}" method="post">
+    <input
+      class="danger"
+      type="submit"
+      value="Delete"
+      onclick="return confirm('Are you sure?');"
+    />
+  </form>
+</article>
+
+{% if not loop.last %}
+<hr />
+{% endif %} {% endfor %} {% endblock %}
