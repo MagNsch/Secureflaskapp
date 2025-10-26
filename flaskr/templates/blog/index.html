@@ -7,7 +7,7 @@
 {% endblock %} {% block content %} {% for post in posts %}
 <article class="post">
   <header>
-    <div>
+    <div >
       <h1>{{ post['title'] }}</h1>
     </div>
     {% if g.user['id'] == post['author_id'] %}
@@ -25,7 +25,7 @@
     </p>
     <ul>
       {% for c in get_comments_for_post(post['id']) %}
-      <li style="padding=10px">
+      <li style="padding: 10px">
         <strong>{{ c['author'] }}:</strong> {{ c['comment'] }} {% if
         g.user['id'] == c['author_id'] %}
         <form
@@ -42,7 +42,11 @@
     </ul>
 
     {% if g.user %}
-    <form style="padding: 10px" action="{{ url_for('comment.add_comment') }}" method="post">
+    <form
+      style="padding: 10px"
+      action="{{ url_for('comment.add_comment') }}"
+      method="post"
+    >
       <input type="hidden" name="post_id" value="{{ post['id'] }}" />
       <input type="text" name="comment" placeholder="Skriv en kommentar" />
       <button type="submit">Send</button>
@@ -51,7 +55,11 @@
     <p>Du skal være logget ind for at kommentere.</p>
     {% endif %}
   </div>
-  <form style="padding: 10px" action="{{ url_for('blog.delete', id=post['id']) }}" method="post">
+  <form
+    style="padding: 10px"
+    action="{{ url_for('blog.delete', id=post['id']) }}"
+    method="post"
+  >
     <input
       class="danger"
       type="submit"

@@ -12,7 +12,17 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        MAX_CONTENT_LENGTH =1 * 1024 * 1024,
+        MAX_FORM_MEMORY_SIZE = 0.2 * 1024 * 1024,
+        MAX_FORM_PARTS = 1000
+
     )
+
+    @app.errorhandler(413)
+    def too_large(e):
+        return "Anmodning er for stor. Maks 1 MB., 413"
+
+
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
     else:
