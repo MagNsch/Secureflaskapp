@@ -46,3 +46,6 @@ CREATE TABLE comment_like (
   FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
   FOREIGN KEY (comment_id) REFERENCES comment(id) ON DELETE CASCADE
 );
+
+
+ALTER TABLE user ADD COLUMN role TEXT DEFAULT 'user';

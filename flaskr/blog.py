@@ -3,7 +3,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from flaskr.auth import login_required
+from flaskr.auth import login_required, role_required
 from flaskr.db import get_db
 
 bp = Blueprint('blog', __name__)
@@ -13,7 +13,7 @@ bp = Blueprint('blog', __name__)
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, p.title, p.body, p.created, author_id, username, email'
+        'SELECT p.id, p.title, p.body, p.created, p.author_id, u.username, u.email, u.role'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
@@ -108,3 +108,10 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))
+
+
+@bp.route("/adminpage", methods=('GET',))
+@role_required('admin')
+@login_required
+def adminpage():
+    return render_template('blog/adminpage.html')

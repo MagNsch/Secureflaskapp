@@ -12,11 +12,44 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        
+        #Uploade security settings
         MAX_CONTENT_LENGTH =1 * 1024 * 1024,
         MAX_FORM_MEMORY_SIZE = 0.2 * 1024 * 1024,
-        MAX_FORM_PARTS = 1000
+        MAX_FORM_PARTS = 1000,
 
+        # Cookies and sessions security
+        SESSION_COOKIE_HTTPONLY = True,
+        SESSION_COOKIE_SECURE = True,
+        SESSION_COOKIE_SAMESITE = 'LAX',
+        REMEMBER_COOKIE_HTTPONLY = True,
+        REMEBER_COOKIE_SECURE = True,
+        REMEMBER_COOKIE_SAMESITE = 'Lax',
+        PERMANENT_SESSION_LIFETIME = 300
     )
+
+    @app.after_request
+    def add_security_headers(response):
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "style-src 'self' https://cdn.simplecss.org;"
+        "img-src 'self'; "
+        "font-src 'self'; "
+        "base-uri 'self'; "
+        "form-action 'self'; "
+        "frame-ancestors 'none';"
+    )
+        # removing javascript
+        
+        #"img-src 'self'; "
+        # "font-src 'self'; "
+        # "base-uri 'self'; "
+        # "form-action 'self'; "
+        # "frame-ancestors 'none';"
+
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+        return response
 
     @app.errorhandler(413)
     def too_large(e):

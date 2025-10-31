@@ -7,7 +7,7 @@
 {% endblock %} {% block content %} {% for post in posts %}
 <article class="post">
   <header>
-    <div >
+    <div>
       <h1>{{ post['title'] }}</h1>
     </div>
     {% if g.user['id'] == post['author_id'] %}
@@ -55,6 +55,7 @@
     <p>Du skal være logget ind for at kommentere.</p>
     {% endif %}
   </div>
+  {% if g.user and g.user['id'] == post['author_id'] %}
   <form
     style="padding: 10px"
     action="{{ url_for('blog.delete', id=post['id']) }}"
@@ -67,6 +68,7 @@
       onclick="return confirm('Are you sure?');"
     />
   </form>
+  {% endif %}
 </article>
 
 {% if not loop.last %}
