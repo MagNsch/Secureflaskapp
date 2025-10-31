@@ -55,7 +55,8 @@
     <p>Du skal være logget ind for at kommentere.</p>
     {% endif %}
   </div>
-  {% if g.user and g.user['id'] == post['author_id'] %}
+  {% if g.user and (g.user['id'] == post['author_id'] or g.user['role'] ==
+  'admin') %}
   <form
     style="padding: 10px"
     action="{{ url_for('blog.delete', id=post['id']) }}"
