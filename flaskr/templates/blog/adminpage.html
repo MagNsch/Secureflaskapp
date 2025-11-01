@@ -1,8 +1,23 @@
 {% extends 'base.html' %} 
-
-{% block header %}
-{% endblock %} 
-
+{% block header %}<h1>Adminpage</h1> {% endblock %} 
 {% block content %}
-<h1>You are admin and you can be here</h1>
+<table>
+  <tr>
+    <th>Userid</th>
+    <th>Email</th>
+    <th>Username</th>
+    <th>Userrole</th>
+    <th>Action</th>
+  </tr>
+  {% for user in users %}
+  <tr>
+    <td>{{ user.id }}</td>
+    <td>{{user.email}}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.role }}</td>
+    <td><button type="submit" value="updateuser">Update</td>
+  </tr>
+  {% endfor %}
+</table>
+
 {% endblock %}

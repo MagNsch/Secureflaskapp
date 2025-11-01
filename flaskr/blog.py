@@ -114,4 +114,6 @@ def delete(id):
 @role_required('admin')
 @login_required
 def adminpage():
-    return render_template('blog/adminpage.html')
+    db = get_db()
+    users = db.execute('SELECT id, email, username, role FROM user').fetchall()
+    return render_template('blog/adminpage.html', users=users)
